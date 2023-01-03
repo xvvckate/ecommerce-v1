@@ -72,11 +72,14 @@ const updateOrder = async (req, res, next)=>{
                 _id : oid,
                 user : req.data._id, 
             }]}) 
+<<<<<<< HEAD
         if(doc.order_status == ACTIONS.ON_ITS_WAY){
             return res.json({
                 message : "Order on it's way"
             })
         }
+=======
+>>>>>>> 9b7241b (order completed)
         doc.quantity = quantity
         await doc.save()
         res.sendStatus(204)

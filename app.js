@@ -33,7 +33,11 @@ app.use("/item_detail", require("./routes/api/item_detail.router"))
 app.use("/comment", require("./routes/api/comment.router"))
 app.use("/wishlist", require("./routes/api/wishlist.router"))
 app.use("/order", require("./routes/api/order.router"))
+<<<<<<< HEAD
 app.use("/transaction", require("./routes/api/transaction.router"))
+=======
+
+>>>>>>> 9b7241b (order completed)
 // app.use("/role", require("./routes/api/role.router"))
 
 app.use((req, res, next)=>{
