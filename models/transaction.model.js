@@ -2,7 +2,11 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const TransactionSchema = new Schema({
-
+    order_by : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "user",
+        required : true
+    },
     order_reference : [{
         type: mongoose.Schema.Types.ObjectId,
         ref : "order",
