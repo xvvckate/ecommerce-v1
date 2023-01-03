@@ -5,7 +5,7 @@ const ACTIONS = {
     "OUT_OF_STOCK" : "OUT_OF_STOCK",
 
     "PENDING" : "PENDING",
-    "IN_ITS_WAY" : "IN_ITS_WAY",
+    "ON_ITS_WAY" : "ON_ITS_WAY",
 
 }
 
