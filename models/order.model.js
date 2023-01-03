@@ -14,15 +14,13 @@ const OrderSchema = new Schema({
         required : true
     },
     quantity : { type : Number, required : true },
-    status : {
+    order_status : {
         type : String,
         default : ACTIONS.IN_PROGRESS,
         enum: [ACTIONS.IN_PROGRESS, ACTIONS.DELIVERED, ACTIONS.OUT_OF_STOCK, ACTIONS.CANCLED]
-    },
-    createdAt : {
-        type : Date,
-        default : Date.now
     }
+},{
+    timestamps : true
 })
 
 const Order = mongoose.model("order", OrderSchema)

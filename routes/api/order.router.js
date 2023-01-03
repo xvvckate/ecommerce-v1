@@ -1,17 +1,18 @@
-// const express =require("express")
+const express =require("express")
 
-// const { ROLES } = require("../../config/roleList")
-// const verifyRoles = require("../../middleware/verifyRoles")
-// const orderController = require("../../controllers/orderController")
-// const router = express.Router()
+const { ROLES } = require("../../config/roleList")
+const verifyRoles = require("../../middleware/verifyRoles")
+const orderController = require("../../controllers/orderController")
+const router = express.Router()
 
-// router.route("/")
-//      .get(orderController.getOrders)
-//      .post(orderController.placeOrder)
-//      .delete(orderController.cancleOrder)
+router.route("/")
+     .get(orderController.getOrders)
+     .post(orderController.placeOrder)
+     .put(orderController.updateOrder)
+     .delete(orderController.removeOrder)
 
-// router.route("/:id")
-//       .get(orderController.getOrder)
+router.route("/:id")
+      .get(orderController.getOrder)
      
 // // router.route("/")
 // //       .get(verifyRoles(ROLES.CUSTOMER), orderController.getOrder)
@@ -21,4 +22,4 @@
 // // router.route("/:id")
 // //       .get(verifyRoles(ROLES.CUSTOMER), orderController.getOrder)
      
-// module.exports = router
+module.exports = router

@@ -27,16 +27,15 @@ app.use(verifyAuth)
 
 app.use("/user", require("./routes/api/user.router")) 
 app.use("/profile", require("./routes/api/profile.router"))
-app.use("/role", require("./routes/api/role.router"))
 app.use("/brand", require("./routes/api/brand.router"))
 app.use("/catagory", require("./routes/api/catagory.router"))
 app.use("/item", require("./routes/api/item.router"))
 app.use("/item_detail", require("./routes/api/item_detail.router"))
 app.use("/comment", require("./routes/api/comment.router"))
 app.use("/wishlist", require("./routes/api/wishlist.router"))
+app.use("/order", require("./routes/api/order.router"))
 
-// app.use("/order", require("./routes/api/order.router"))
-
+// app.use("/role", require("./routes/api/role.router"))
 
 app.use((req, res, next)=>{
     next(errors.NotFound())
