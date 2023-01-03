@@ -11,7 +11,7 @@ const ItemDetailSchema = new Schema({
     size : { type : String },
     price : {
         fixPrice : { type : Number, required : true },
-        discountPercent : { type : Number },
+        discountPercent : { type : Number, default : 0 },
     },
 })
 

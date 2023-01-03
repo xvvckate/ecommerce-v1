@@ -12,7 +12,7 @@ const TransactionSchema = new Schema({
         ref : "order",
         required : true
     }],
-    item_total_price : { tpye: Number, required : true },
+    item_total_price : { type: Number, required : true },
     bicker_price : { type : Number, required : true },
     total_price : { type : Number, required : true},
     recived_by : {
