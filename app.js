@@ -27,7 +27,6 @@ app.use(verifyAuth)
 
 app.use("/user", require("./routes/api/user.router")) 
 app.use("/profile", require("./routes/api/profile.router"))
-app.use("/role", require("./routes/api/role.router"))
 app.use("/brand", require("./routes/api/brand.router"))
 app.use("/catagory", require("./routes/api/catagory.router"))
 app.use("/item", require("./routes/api/item.router"))
