@@ -17,11 +17,7 @@ const OrderSchema = new Schema({
     order_status : {
         type : String,
         default : ACTIONS.IN_PROGRESS,
-<<<<<<< HEAD
         enum: [ACTIONS.IN_PROGRESS, ACTIONS.DELIVERED, ACTIONS.ON_ITS_WAY, ACTIONS.OUT_OF_STOCK, ACTIONS.CANCLED]
-=======
-        enum: [ACTIONS.IN_PROGRESS, ACTIONS.DELIVERED, ACTIONS.OUT_OF_STOCK, ACTIONS.CANCLED]
->>>>>>> 9b7241b (order completed)
     }
 },{
     timestamps : true
