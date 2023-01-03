@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const { ACTIONS } = require("../config/actionList")
 const Schema = mongoose.Schema
 
 const OrderSchema = new Schema({
@@ -7,22 +8,16 @@ const OrderSchema = new Schema({
         ref : "user",
         required : true
     },
-    product : {
+    item : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "product",
+        ref : "item_detail",
         required : true
     },
-    product_detail : {
-        type : mongoose.Schema.Types.ObjectId,
-        required : true,
-    },
-    quantity : {
-        type : Number,
-        required : true
-    },
+    quantity : { type : Number, required : true },
     status : {
         type : String,
-        default : ""
+        default : ACTIONS.IN_PROGRESS,
+        enum: [ACTIONS.IN_PROGRESS, ACTIONS.DELIVERED, ACTIONS.OUT_OF_STOCK, ACTIONS.CANCLED]
     },
     createdAt : {
         type : Date,
@@ -30,5 +25,5 @@ const OrderSchema = new Schema({
     }
 })
 
-const Order = mongoose.model('order', OrderSchema)
+const Order = mongoose.model("order", OrderSchema)
 module.exports = Order
