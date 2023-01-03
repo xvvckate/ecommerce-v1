@@ -5,7 +5,6 @@ const express = require("express")
 const errors = require("http-errors")
 const { default: mongoose} = require("mongoose")
 
-
 const { connectDB } = require("./config/dbConfig")
 const verifyAuth = require("./middleware/verifyAuth")
 
@@ -13,7 +12,7 @@ const app = express()
 
 connectDB()
 mongoose.connection.once("open", ()=>{
-    console.log("Connected to Mongoose")
+    console.log("Connected to Mongoose ...")
 }).on("error", (err)=>{
     console.log(err)
 })
@@ -33,9 +32,9 @@ app.use("/item", require("./routes/api/item.router"))
 app.use("/item_detail", require("./routes/api/item_detail.router"))
 app.use("/comment", require("./routes/api/comment.router"))
 app.use("/wishlist", require("./routes/api/wishlist.router"))
-
-// app.use("/order", require("./routes/api/order.router"))
-
+app.use("/order", require("./routes/api/order.router"))
+app.use("/transaction", require("./routes/api/transaction.router"))
+// app.use("/role", require("./routes/api/role.router"))
 
 app.use((req, res, next)=>{
     next(errors.NotFound())
