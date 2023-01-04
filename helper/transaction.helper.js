@@ -5,14 +5,14 @@ const ItemDetail = require("../models/item_detail.model")
 
 const { ACTIONS } = require("../config/actionList")
 
-async function commitTransaction(req, res, next){
-    let item_total_price = 0, bicker_price = 0, total = 0, total_price = 0;
-    let order_list = []
-    
+async function commitTransaction(uid){
     try{
+        let item_total_price = 0, bicker_price = 0, total = 0, total_price = 0;
+        let order_list = []
+        
         const orders = await Order.find({ 
             $and : [{ 
-                user : req.data.uid, 
+                user : uid, 
                 order_status : ACTIONS.IN_PROGRESS 
             }]
         });
@@ -34,17 +34,19 @@ async function commitTransaction(req, res, next){
 
         bicker_price = 100
         total_price = item_total_price + bicker_price
-        await Transaction.create({
-            order_by : req.data._id,
+        
+        const transaction = {
+            order_by : uid,
             order_reference : order_list,
             item_total_price,
             bicker_price,
-            total_price
-        })
-
+            total_price,
+        }
+        return transaction
     }catch(err){
-        next(err)
+        console.log(err)
     }
+
 }
 
 module.exports = {
