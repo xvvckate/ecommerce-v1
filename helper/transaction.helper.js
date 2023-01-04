@@ -1,6 +1,5 @@
 
 const Order = require("../models/order.model")
-const Transaction = require("../models/transaction.model")
 const ItemDetail = require("../models/item_detail.model")
 
 const { ACTIONS } = require("../config/actionList")
@@ -38,9 +37,9 @@ async function commitTransaction(uid){
         const transaction = {
             order_by : uid,
             order_reference : order_list,
-            item_total_price,
-            bicker_price,
-            total_price,
+            item_total_price : item_total_price.toFixed(2),
+            bicker_price : bicker_price.toFixed(2),
+            total_price : total_price.toFixed(2),
         }
         return transaction
     }catch(err){

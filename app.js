@@ -34,6 +34,7 @@ app.use("/comment", require("./routes/api/comment.router"))
 app.use("/wishlist", require("./routes/api/wishlist.router"))
 app.use("/order", require("./routes/api/order.router"))
 app.use("/transaction", require("./routes/api/transaction.router"))
+app.use("/delivery", require("./routes/api/delivery.router"))
 
 // app.use("/role", require("./routes/api/role.router"))
 
