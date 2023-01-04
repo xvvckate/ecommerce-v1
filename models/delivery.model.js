@@ -8,18 +8,12 @@ const DeliverySchema = new Schema({
         ref : "transaction",
         required : true
     },
-    order_by : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "user",
-        required : true
+    delivery_address : { 
+        type : mongoose.Schema.Types.ObjectId, 
+        // ref : "user.profile",
+        required : true 
     },
-    order_reference : [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref : "order",
-        required : true
-    }],
-    delivery_address : { type : mongoose.Schema.Types.ObjectId, required : true },
-    delivery_by : {
+    delivered_by : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "user"
     },
@@ -28,8 +22,8 @@ const DeliverySchema = new Schema({
         default : ACTIONS.PENDING,
         enum : [ ACTIONS.PENDING, ACTIONS.IN_ITS_WAY, ACTIONS.DELIVERED ]
     },
-    delivered_date : { type : Date, required : true }
+    delivered_date : { type : Date }
 })
 
 const Delivery = mongoose.model("delivery", DeliverySchema)
-module.exports = { Delivery }
+module.exports = Delivery 
