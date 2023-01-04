@@ -6,4 +6,7 @@ router.route("")
       .get(transactionController.getTransactions)
       .post(transactionController.createTransaction)
 
+router.route("/:id")
+      .get(transactionController.getTransaction)
+
 module.exports = router
