@@ -88,11 +88,7 @@ const updateAddress = async (req, res, next)=>{
     const { aid } = req.query
     const { alias, country, city, street } = req.body
 
-    if(!aid){
-        return res.status(400).json({
-            message : "Query Required!"
-        })        
-    }
+    if(!aid) return errors.BadRequest()
 
     try{
         const _ = await addressSchema.validateAsync({
@@ -122,11 +118,7 @@ const updateAddress = async (req, res, next)=>{
 const removeAddress = async (req, res, next)=>{
     const { aid } = req.query
 
-    if(!aid){
-        return res.status(400).json({
-            message : "Query Required!"
-        })
-    }
+    if(!aid) return errors.BadRequest()
 
     try{
         const doc = await User.findOne({ _id : req.data._id })
