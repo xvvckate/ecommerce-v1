@@ -10,15 +10,30 @@ const getOrder = async (req, res, next)=>{
     
     if(!id) return errors.BadRequest()
     try{
-        const data = await Order.findById(id).populate({
+        const doc = await Order.findById(id).populate({path:"user"}).populate({
             path : "item", select : "-_id color size", populate : { 
                 path : "item", select : "-_id item", populate : { 
                     path : "brand", select : "-_id brand" 
                 }
             }
-        }).select("-user").exec()
-        res.status(200).json(data)
+        }).exec()
 
+        const { quantity, order_status, user } = doc
+        const { firstname, middlename, lastname } = user.profile.fullname
+        const { brand, item } = doc?.item.item
+
+        const data = { 
+            order_id : doc._id,
+            order_by : `${firstname} ${middlename} ${lastname}`,
+            brand : brand.brand,
+            item : item,
+            color : item.color, 
+            size : item.size,
+            quantity,
+            order_status
+        }
+
+        res.status(200).json(data)
     }catch(err){
         next(err)
     }
@@ -26,16 +41,35 @@ const getOrder = async (req, res, next)=>{
 
 const getOrders = async (req, res, next)=>{
     try{
-        const data = await Order.find({ $and : [{ 
+        const docs = await Order.find({ $and : [{ 
             user : req.data._id, 
             order_status : ACTIONS.IN_PROGRESS }
-        ]}).populate({
+        ]}).populate({path:"user"}).populate({
             path : "item", select : "-_id color size", populate : { 
                 path : "item", select : "-_id item", populate : { 
-                    path : "brand", select : "-_id brand"
+                    path : "brand", select : "-_id brand" 
                 }
             }
-        }).select("-user").exec()
+        }).exec()
+        
+        const data = docs.map(doc=>{
+            const { quantity, order_status, user } = doc
+            const { firstname, middlename, lastname } = user.profile.fullname
+            const { brand, item } = doc?.item.item
+    
+            return { 
+                order_id : doc._id,
+                order_by : `${firstname} ${middlename} ${lastname}`,
+                brand : brand.brand,
+                item : item,
+                color : item.color, 
+                size : item.size,
+                quantity,
+                order_status
+            }
+        })
+
+        
         res.status(200).json(data)
     }catch(err){
         next(err)
