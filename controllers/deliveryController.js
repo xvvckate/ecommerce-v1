@@ -28,6 +28,7 @@ const getDelivery = async (req, res, next)=>{
         
         const data = { 
             delivery_reference : doc._id,
+            transaction_reference : transaction_reference._id,
             order_by : `${firstname} ${middlename} ${lastname}`,
             delivery_address : address,
             item_total_price,
@@ -65,6 +66,7 @@ const getDeliverys = async (req, res, next)=>{
             
             return { 
                 delivery_reference : doc._id,
+                transaction_reference : transaction_reference._id,
                 order_by : `${firstname} ${middlename} ${lastname}`,
                 delivery_address : address,
                 item_total_price,
