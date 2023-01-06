@@ -5,14 +5,22 @@ const errors = require("http-errors")
 
 const getItemDetail = async (req, res, next)=>{
     const { id } = req.params
-    if(!id){
-        return res.status(400).json({
-            message : "Parameter Required!"
-        })
-    }
+    if(!id) return errors.BadRequest()
     
     try{
-        const data = await ItemDetail.findById(id).populate("item", "-_id item").exec()
+        const doc = await ItemDetail.findById(id).populate({path : "item", populate : { path : "brand"}}).exec()
+        const { _id, color, size, price } = doc
+        const { item, brand } = doc.item
+        const data = {
+            item_reference : _id,
+            brand : brand.brand,
+            item,
+            color,
+            size,
+            fixPrice : price.fixPrice,
+            discountPercent : `${price.discountPercent}%`,
+        }
+
         res.status(200).json(data)
     }catch(err){
         next(err)
@@ -21,7 +29,20 @@ const getItemDetail = async (req, res, next)=>{
 
 const getItemDetails = async (req, res, next)=>{
     try{
-        const data = await ItemDetail.find().populate("item", "-_id item")
+        const docs = await ItemDetail.find().populate({path : "item", populate : { path : "brand"}}).exec()
+        const data = docs.map(doc=>{
+            const { _id, color, size, price } = doc
+            const { item, brand } = doc?.item
+            return {
+                item_reference : _id,
+                brand : brand?.brand,
+                item : item,
+                color,
+                size,
+                fixPrice : price?.fixPrice,
+                discountPercent : `${price.discountPercent}%`,
+            }
+        })
         res.status(200).json(data)
     }catch(err){
         next(err)
@@ -52,11 +73,8 @@ const createItemDetail = async (req, res, next)=>{
 const updateItemDetail = async (req, res, next)=>{
     const { iid } = req.query
     const { color, size, fixPrice, discountPercent } = req.body
-    if(!iid){
-        return res.status(400).json({
-            message : "Query Required!"
-        })
-    }
+    if(!iid) return errors.BadRequest()
+
     try{
         const schema = await itemDetailSchema.validateAsync({
             item : iid, 
@@ -81,11 +99,7 @@ const updateItemDetail = async (req, res, next)=>{
 
 const removeItemDetail = async (req, res, nest)=>{
     const { iid } = req.query
-    if(!iid){
-        return res.status(400).json({
-            message : "Query Required!"
-        })
-    }
+    if(!iid) return errors.BadRequest()
 
     try{
         const data = await ItemDetail.findByIdAndRemove(iid)
@@ -106,3 +120,4 @@ module.exports = {
     updateItemDetail,
     removeItemDetail
 }
+
