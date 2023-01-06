@@ -45,8 +45,37 @@ const getDelivery = async (req, res, next)=>{
 
 const getDeliverys = async (req, res, next)=>{
     try{
-        const data = await Delivery.find()
-        res.status(200).json(data)        
+        const docs = await Delivery.find().populate({
+            path : "transaction_reference", populate : { 
+                path : "order_by", select:"-_id profile total_price is_complete" 
+            }
+        }).exec()
+        const data = await docs.map(doc=>{
+            const { transaction_reference, delivery_address, delivery_status } = doc
+            const { order_by, item_total_price, bicker_price, total_price, is_complete } = transaction_reference
+            const { profile } = order_by
+            const { firstname, middlename, lastname } = profile?.fullname
+            
+            const _address = profile.address.find(address=> address._id !== delivery_address)
+            const address = {
+                country : _address.country,
+                street : _address.street,
+                city : _address.city,
+            }
+            
+            return { 
+                delivery_reference : doc._id,
+                order_by : `${firstname} ${middlename} ${lastname}`,
+                delivery_address : address,
+                item_total_price,
+                bicker_price,
+                total_price,
+                is_complete,
+                delivery_status           
+            }
+        })
+
+        res.status(200).json(data)       
     }catch(err){
         next(err)
     }
