@@ -101,14 +101,6 @@ const createDelivery = async (req, res, next)=>{
     }
 }
 
-const removeDelivery = async (req, res, next)=>{
-    try{
-
-    }catch(err){
-
-    }
-}
-
 module.exports = {
     getDelivery,
     getDeliverys,

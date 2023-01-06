@@ -4,11 +4,7 @@ const Item = require("../models/item.model")
 const createComment = async (req, res, next)=>{
     const { iid } = req.query
     const { comment, ratting } = req.body
-    if(!iid){
-        return res.status(400).json({
-            message: "Query Required!"
-        })
-    }
+    if(!iid) return errors.BadRequest()
 
     try{
         const doc = await Item.findOne({ _id : iid })
@@ -23,11 +19,7 @@ const createComment = async (req, res, next)=>{
 const updateComment = async (req, res, next)=>{
     const { iid, cid } = req.query
     const { comment, ratting } = req.body
-    if(!iid || !cid){
-        return res.status(400).json({
-            message: "Query Required!"
-        })
-    }
+    if(!iid || !cid) return errors.BadRequest()
 
     try{
         const doc = await Item.findOne({  _id : iid })
@@ -46,11 +38,7 @@ const updateComment = async (req, res, next)=>{
 
 const deleteComment = async (req, res, next)=>{
     const { iid, cid } = req.query
-    if(!iid || !cid){
-        return res.status(400).json({
-            message: "Query Required!"
-        })
-    }
+    if(!iid || !cid) return errors.BadRequest()
 
     try{
         const doc = await Item.findOne({  _id : iid })
