@@ -5,11 +5,7 @@ const errors = require("http-errors")
 
 const getBrand = async (req, res, next)=>{
     const { id } = req.params
-    if(!id){
-        return res.status(400).json({
-            message : "Parameter Required!"
-        })
-    }
+    if(!id) return errors.BadRequest()
     try{
         const data = await Brand.findById(id).exec()
         res.status(200).json(data)
@@ -42,11 +38,7 @@ const createBrand = async (req, res, next)=>{
 const updateBrand = async (req, res, next)=>{
     const { bid } = req.query
     const { brand, brand_description } = req.body
-    if(!bid){
-        return res.status(400).json({
-            message : "Query Required!"
-        })
-    }
+    if(!bid) return errors.BadRequest()
     try{
         const schema = await brandSchema.validateAsync({ brand, brand_description })
         const data = await Brand.findByIdAndUpdate(bid, schema)
@@ -62,11 +54,7 @@ const updateBrand = async (req, res, next)=>{
 
 const removeBrand = async (req, res, nest)=>{
     const { bid } = req.query
-    if(!bid){
-        return res.status(400).json({
-            message : "Query Required!"
-        })
-    }
+    if(!bid) return errors.BadRequest()
 
     try{
         const data = await Brand.findByIdAndRemove(bid)
