@@ -1,7 +1,6 @@
 const Joi = require("joi")
 
 const itemDetailSchema = Joi.object({
-    item : Joi.string().required(),
     color : Joi.string(),
     size : Joi.string(),
     price : Joi.object({
