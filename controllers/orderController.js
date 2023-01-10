@@ -23,7 +23,7 @@ const getOrder = async (req, res, next)=>{
         const { brand, item } = doc?.item.item
 
         const data = { 
-            order_id : doc._id,
+            order_reference : doc._id,
             order_by : `${firstname} ${middlename} ${lastname}`,
             brand : brand.brand,
             item : item,
@@ -58,7 +58,7 @@ const getOrders = async (req, res, next)=>{
             const { brand, item } = doc?.item.item
     
             return { 
-                order_id : doc._id,
+                order_reference : doc._id,
                 order_by : `${firstname} ${middlename} ${lastname}`,
                 brand : brand.brand,
                 item : item,
