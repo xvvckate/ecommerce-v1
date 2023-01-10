@@ -3,7 +3,7 @@ const router = express.Router()
 const profileController = require("../../controllers/profileController")
 
 router.route("/")
-      .get(profileController.viewProfile)
+    //   .get(profileController.viewProfile)
       .post(profileController.createProfile)
 
 router.route("/address")
@@ -14,4 +14,3 @@ router.route("/address")
 
 
 module.exports = router
-
