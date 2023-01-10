@@ -6,11 +6,11 @@ const User = require("../models/user.model")
 const { authenticateSchema } = require("../validation/auth.validation")
 
 const authenticateUser = async (req, res, next)=>{
-    const { username, password } = req.body 
+    const { phone_number, password } = req.body 
     
     try{
-        const _ = await authenticateSchema.validateAsync({ username, password })
-        const user = await User.findOne({username}).exec()
+        const _ = await authenticateSchema.validateAsync({ phone_number, password })
+        const user = await User.findOne({phone_number}).exec()
         if(!user) throw errors.Unauthorized()
 
         const match = await bcrypt.compare(password, user.password)
