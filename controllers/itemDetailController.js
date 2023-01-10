@@ -10,15 +10,16 @@ const getItemDetail = async (req, res, next)=>{
     try{
         const doc = await ItemDetail.findById(id).populate({path : "item", populate : { path : "brand"}}).exec()
         const { _id, color, size, price } = doc
-        const { item, brand } = doc.item
+        const { item, brand } = doc?.item
         const data = {
-            item_reference : _id,
-            brand : brand.brand,
+            item_detail_reference : _id,
+            item_reference : doc.item._id,
+            brand : brand?.brand,
             item,
             color,
             size,
-            fixPrice : price.fixPrice,
-            discountPercent : `${price.discountPercent}%`,
+            fixPrice : price?.fixPrice,
+            discountPercent : `${price?.discountPercent}%`,
         }
 
         res.status(200).json(data)
@@ -34,13 +35,14 @@ const getItemDetails = async (req, res, next)=>{
             const { _id, color, size, price } = doc
             const { item, brand } = doc?.item
             return {
-                item_reference : _id,
+                item_detail_reference : _id,
+                item_reference : doc?.item._id,
                 brand : brand?.brand,
                 item : item,
                 color,
                 size,
                 fixPrice : price?.fixPrice,
-                discountPercent : `${price.discountPercent}%`,
+                discountPercent : `${price?.discountPercent}%`,
             }
         })
         res.status(200).json(data)
@@ -77,7 +79,6 @@ const updateItemDetail = async (req, res, next)=>{
 
     try{
         const schema = await itemDetailSchema.validateAsync({
-            item : iid, 
             color, 
             size, 
             price : { 
