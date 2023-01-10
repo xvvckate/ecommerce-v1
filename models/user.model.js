@@ -12,7 +12,7 @@ const UserSchema = new Schema({
         lowercase: true,
         reqired : true,
     },
-    phone : {
+    phone_number : {
         type : String,
         unique : true,
         trim : true,
