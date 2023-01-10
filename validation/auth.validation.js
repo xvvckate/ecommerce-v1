@@ -6,10 +6,10 @@ const authenticateSchema = Joi.object({
         .min(5)
         .max(20)
         .required(),
-    password : Joi.string()
+    phone_number : Joi.string()
         .min(6)
         .max(30)
-        .regex(/[a-zA-Z0-9]{3,30}/)
+        .regex(/[0-9]{3,30}/)
         .required()
 })
 
