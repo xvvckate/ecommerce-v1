@@ -11,7 +11,19 @@ const getItem = async (req, res, next)=>{
         })
     }
     try{
-        const data = await Item.findById(id).populate("catagory", "-_id catagory").populate("brand", "-_id brand").exec()
+        const doc = await Item.findById(id).populate("catagory", "-_id catagory").populate("brand", "-_id brand").exec()
+        const { _id, item, brand, catagory, made_in, description, usage, comments } = doc 
+        const data = {
+            item_reference : _id,
+            brand : brand.brand,
+            catagory : catagory.catagory,
+            item,
+            made_in,
+            description,
+            usage,
+            comments
+        }
+
         res.status(200).json(data)
     }catch(err){
         next(err)
@@ -20,7 +32,21 @@ const getItem = async (req, res, next)=>{
 
 const getItems = async (req, res, next)=>{
     try{
-        const data = await Item.find().populate("catagory", "-_id catagory").populate("brand", "-_id brand").exec()
+        const docs = await Item.find().populate("catagory", "-_id catagory").populate("brand", "-_id brand").exec()
+        const data = await docs.map(doc=>{
+            const { _id, item, brand, catagory, made_in, description, usage, comments } = doc 
+            return {
+                item_reference : _id,
+                brand : brand.brand,
+                catagory : catagory.catagory,
+                item,
+                made_in,
+                description,
+                usage,
+                comments
+            }
+
+        })
         res.status(200).json(data)
     }catch(err){
         next(err)
