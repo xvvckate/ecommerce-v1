@@ -16,13 +16,13 @@ const getAllUsers = async (req, res, next)=>{
 }
 
 const registerUser = async (req, res, next)=>{
-    const { username, phone, password } = req.body
+    const { username, phone_number, password } = req.body
     try{
-        const _ = await userSchema.validateAsync({ username, phone, password})
+        const _ = await userSchema.validateAsync({ username, phone_number, password})
         const checkUsername = await User.findOne({ 
             $or : [
                 {username}, 
-                {phone}
+                {phone_number}
             ]
         })
 
@@ -30,7 +30,7 @@ const registerUser = async (req, res, next)=>{
         const hashedPassword = await bcrypt.hash(password, 8)
         const data = await User.create({
             username,
-            phone,
+            phone_number,
             password : hashedPassword
         })
         
