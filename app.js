@@ -21,6 +21,7 @@ app.use(cors())
 app.use(express.json())
 app.use(morgan("dev"))
 
+app.use("/", require("./routes/api/public.route"))
 app.use("/auth", require("./routes/api/auth.router"))
 app.use(verifyAuth)
 
