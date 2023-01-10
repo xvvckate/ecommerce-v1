@@ -73,7 +73,8 @@ const getDeliverys = async (req, res, next)=>{
                 bicker_price,
                 total_price,
                 is_complete,
-                delivery_status           
+                delivery_status,
+                         
             }
         })
 
