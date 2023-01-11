@@ -23,8 +23,8 @@ app.use(morgan("dev"))
 
 app.use("/", require("./routes/api/public.route"))
 app.use("/auth", require("./routes/api/auth.router"))
-app.use(verifyAuth)
 
+app.use(verifyAuth)
 app.use("/user", require("./routes/api/user.router")) 
 app.use("/profile", require("./routes/api/profile.router"))
 app.use("/brand", require("./routes/api/brand.router"))
