@@ -10,5 +10,8 @@ router.route("")
 router.route("/:id")
       .get(deliveryController.getDelivery)
 
+router.route("/address")
+      .patch(deliveryController.changeDeliveryAddress)
+
 module.exports = router
       
