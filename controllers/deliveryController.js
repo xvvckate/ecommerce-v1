@@ -1,5 +1,6 @@
-const Delivery = require("../models/delivery.model")
+const Joi = require("joi")
 const errors = require("http-errors")
+const Delivery = require("../models/delivery.model")
 const { deliverySchema } = require("../validation/delivery.validation")
 
 
@@ -18,14 +19,16 @@ const getDelivery = async (req, res, next)=>{
         const { order_by, item_total_price, bicker_price, total_price, is_complete } = transaction_reference
         const { profile } = order_by
         const { firstname, middlename, lastname } = profile?.fullname
-        
-        const _address = profile.address.find(address=> address._id !== delivery_address)
+        let counter = 0;
+        const _address = await profile?.address.find(address=>String(address._id) == String(delivery_address))
+
         const address = {
-            country : _address.country,
-            street : _address.street,
-            city : _address.city,
+            alias : _address?.alias,
+            country : _address?.country,
+            city : _address?.city,
+            street : _address?.street,
         }
-        
+
         const data = { 
             delivery_reference : doc._id,
             transaction_reference : transaction_reference._id,
@@ -57,12 +60,14 @@ const getDeliverys = async (req, res, next)=>{
             const { profile } = order_by
             const { firstname, middlename, lastname } = profile?.fullname
             
-            const _address = profile.address.find(address=> address._id !== delivery_address)
+            const _address = profile?.address.find(address=> String(address._id) == String(delivery_address))
             const address = {
-                country : _address.country,
-                street : _address.street,
-                city : _address.city,
+                alias : _address?.alias,
+                country : _address?.country,
+                city : _address?.city,
+                street : _address?.street,
             }
+
             
             return { 
                 delivery_reference : doc._id,
@@ -102,8 +107,37 @@ const createDelivery = async (req, res, next)=>{
     }
 }
 
+
+const changeDeliveryAddress = async (req, res, next)=>{
+    const { did } = req.query
+    const { address } = req.body
+    if(!did) return errors.BadRequest();
+
+    const addressSchema = Joi.object({
+        address : Joi.string().required()
+    })
+
+    try{
+        const _ = addressSchema.validateAsync({ address })
+        const doc = await Delivery.findOne({_id : did })
+        if(!doc){
+            return errors.NotFound()
+        }
+        doc.delivery_address = address
+        const data = await doc.save()
+        res.status(200).json({
+            status : true,
+            data
+        })
+            
+    }catch(err){
+        next(err)
+    }
+}
+
 module.exports = {
     getDelivery,
     getDeliverys,
-    createDelivery
+    createDelivery,
+    changeDeliveryAddress
 }
