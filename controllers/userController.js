@@ -1,4 +1,5 @@
 
+const Joi = require("joi")
 const errors = require("http-errors")
 
 const User = require("../models/user.model")
@@ -15,23 +16,48 @@ const getAllUsers = async (req, res, next)=>{
 }
 
 const registerUser = async (req, res, next)=>{
-    const { username, phone_number } = req.body
-    try{
-        const _ = await userSchema.validateAsync({ username, phone_number})
-        const checkUsername = await User.findOne({ 
-            $or : [
-                {username}, 
-                {phone_number}
-            ]
-        })
+    const { phone_number } = req.body
+    const bodyValidator = Joi.string().length(9).regex(/^[0-9]/).required()
 
-        if(checkUsername) throw errors.Conflict()
-        const data = await User.create({
-            username,
-            phone_number,
-        })
+    try{
+        const _ = await bodyValidator.validateAsync({ phone_number })
+        const checkPhoneNumber = await User.findOne({ phone_number })
+
+        if(checkPhoneNumber){
+            return res.status(409).json({
+                error : {
+                    message : "Phone Number is Used!"
+                }
+            })
+        }
+        await User.create({ phone_number })
         
-        res.status(201).json(data)
+        res.sendStatus(201)
+    }catch(err){
+        next(err)
+    }
+}
+
+const addRecoveryPhoneNumber = async (req, res, next)=>{
+    const { recovery_phone_number } = req.body
+    const validateBody = Joi.string().length(9).regex(/^[0-9]/).required()
+    try{
+        const _ = await validateBody.validateAsync({ recovery_phone_number })
+        const doc = await User.findOne({ recovery_phone_number }).exec()
+        if(doc){
+            res.status(409)
+            return res.json({
+                error: {
+                    message : "Phone Number is Used!"
+                }
+            })
+        }
+
+        doc.recovery_phone_number = recovery_phone_number;
+        await doc.save()
+
+        return res.sendStatus(201)
+
     }catch(err){
         next(err)
     }
@@ -40,4 +66,5 @@ const registerUser = async (req, res, next)=>{
 module.exports = { 
     registerUser,
     getAllUsers,
+    addRecoveryPhoneNumber,
 }
