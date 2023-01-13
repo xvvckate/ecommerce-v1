@@ -46,7 +46,7 @@ const createProfile = async (req, res, next)=>{
             }
         ).exec()
 
-        res.status(201).json(doc)
+        res.sendStatus()
     }catch(err){
         next(err)
     }
@@ -78,7 +78,7 @@ const addMoreAddress = async (req, res, next)=>{
                 }
             }).exec()
 
-        res.status(201).json(doc)
+        res.sendStatus(201)
     }catch(err){
         next(err)
     }
@@ -131,7 +131,7 @@ const removeAddress = async (req, res, next)=>{
         const { address } = doc.profile
         await address.id(data?.aid).remove()
         await doc.save()
-        res.sendStatus(204)
+        res.sendStatus(202)
         
     }catch(err){
         next(err)
