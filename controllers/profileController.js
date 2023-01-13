@@ -138,9 +138,20 @@ const removeAddress = async (req, res, next)=>{
     }
 }
 
+const viewProfile = async (req, res, next)=>{
+    try{
+        const data = await User.findById(req.data._id).exec()
+        res.status(200).json(data)
+    }catch(err){
+        next(err)
+    }
+}
+
+
 module.exports = {
     createProfile,
     addMoreAddress,
     updateAddress,
     removeAddress,
+    viewProfile,
 }
