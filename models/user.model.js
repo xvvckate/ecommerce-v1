@@ -5,13 +5,6 @@ const Schema = mongoose.Schema
 
 const UserSchema = new Schema({
 
-    username : {
-        type : String,
-        unique : true,
-        trim: true,
-        lowercase: true,
-        reqired : true,
-    },
     phone_number : {
         type : String,
         unique : true,
