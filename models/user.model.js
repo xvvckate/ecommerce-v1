@@ -23,10 +23,6 @@ const UserSchema = new Schema({
         trim: true,
         lowercase: true
     },
-    password : {
-        type : String,
-        required : true
-    },
     roles : {
         Customer : {
             type : Number,
