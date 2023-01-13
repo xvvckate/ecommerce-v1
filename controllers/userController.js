@@ -19,7 +19,7 @@ const registerUser = async (req, res, next)=>{
     const bodyValidator = Joi.string().length(9).regex(/^[0-9]/).required()
 
     try{
-        const _ = await bodyValidator.validateAsync({ phone_number })
+        const _ = await bodyValidator.validateAsync(phone_number)
         const checkPhoneNumber = await User.findOne({ phone_number })
 
         if(checkPhoneNumber){
@@ -39,20 +39,21 @@ const registerUser = async (req, res, next)=>{
 
 const addRecoveryPhoneNumber = async (req, res, next)=>{
     const { recovery_phone_number } = req.body
-    const validateBody = Joi.string().length(9).regex(/^[0-9]/).required()
+    const bodyValidation = Joi.string().length(9).regex(/^[0-9]/).required()
+
     try{
-        const _ = await validateBody.validateAsync({ recovery_phone_number })
-        const doc = await User.findOne({ recovery_phone_number }).exec()
-        if(doc){
-            res.status(409)
-            return res.json({
+        const schema = await bodyValidation.validateAsync(recovery_phone_number)
+        const doc = await User.findOne({_id : req.data._id}).exec()
+        
+        if(String(doc?.phone_number) == String(schema)){
+            return res.status(409).json({
                 error: {
                     message : "Phone Number is Used!"
                 }
             })
         }
 
-        doc.recovery_phone_number = recovery_phone_number;
+        doc.recovery_phone_number = schema;
         await doc.save()
 
         return res.sendStatus(201)
@@ -62,8 +63,20 @@ const addRecoveryPhoneNumber = async (req, res, next)=>{
     }
 }
 
+const removeRecoveryPhoneNumber = async (req, res, next)=>{
+    try{
+        const doc = await User.findById(req.data._id)
+        doc.recovery_phone_number = null
+        await doc.save()
+        res.sendStatus(202)
+    }catch(err){
+        next(err)
+    }
+}
+
 module.exports = { 
     registerUser,
     getAllUsers,
     addRecoveryPhoneNumber,
+    removeRecoveryPhoneNumber
 }

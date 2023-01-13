@@ -11,11 +11,7 @@ const UserSchema = new Schema({
         trim : true,
         required : true,
     },
-    recovery_phone_number : {
-        type : String,
-        unique : true,
-        trim: true
-    },
+    recovery_phone_number : { type : String, default : null },
     email : {
         type : String,
         trim: true,
