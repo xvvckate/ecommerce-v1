@@ -2,20 +2,19 @@ const errors = require("http-errors")
 const jwt = require("jsonwebtoken")
 
 const User = require("../models/user.model")
-const { authenticateSchema } = require("../validation/auth.validation")
 
 const authenticateUser = async (req, res, next)=>{
-    const { phone_number, password } = req.body 
-    
+    const { phone_number } = req.body 
+    const bodyValidation = Joi.string().length(9).regex(/^[0-9]/).required()
+
     try{
-        const _ = await authenticateSchema.validateAsync({ phone_number })
-        const user = await User.findOne({phone_number}).exec()
+        const _ = await bodyValidation.validateAsync({ phone_number })
+        const user = await User.findOne({ phone_number }).exec()
         if(!user) throw errors.Unauthorized()
 
         const roles = Object.values(user.roles)
         const accesssToke = jwt.sign({
             _id : user._id,
-            username : user.username,
             roles : roles
         },
             process.env.ACCESS_TOKEN_SECRET,
@@ -25,7 +24,6 @@ const authenticateUser = async (req, res, next)=>{
 
         const refreshToke = jwt.sign({
             _id : user._id,
-            username : user.username,
             roles : roles
         },
             process.env.REFRESH_TOKEN_SECRET,
