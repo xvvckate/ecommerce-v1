@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt")
 const errors = require("http-errors")
 const jwt = require("jsonwebtoken")
 
@@ -9,12 +8,10 @@ const authenticateUser = async (req, res, next)=>{
     const { phone_number, password } = req.body 
     
     try{
-        const _ = await authenticateSchema.validateAsync({ phone_number, password })
+        const _ = await authenticateSchema.validateAsync({ phone_number })
         const user = await User.findOne({phone_number}).exec()
         if(!user) throw errors.Unauthorized()
 
-        const match = await bcrypt.compare(password, user.password)
-        if(!match)  throw errors.Unauthorized()
         const roles = Object.values(user.roles)
         const accesssToke = jwt.sign({
             _id : user._id,
