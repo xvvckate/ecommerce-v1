@@ -3,7 +3,6 @@ const Joi = require("joi")
 const errors = require("http-errors")
 
 const User = require("../models/user.model")
-const { userSchema } = require("../validation/user.validation")
 
 
 const getAllUsers = async (req, res, next)=>{
