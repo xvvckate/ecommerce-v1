@@ -16,7 +16,10 @@ const profileSchema = Joi.object({
             })
         ),
         gender : Joi.string()
-    })
+    }),
+    recovery_phone_number : Joi.string()
+        .length(9)
+        .regex(/^[0-9]/),
 })
 
 const addressSchema = Joi.object({
