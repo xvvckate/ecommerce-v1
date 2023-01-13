@@ -1,5 +1,4 @@
 
-const bcrypt = require("bcrypt")
 const errors = require("http-errors")
 
 const User = require("../models/user.model")
@@ -16,9 +15,9 @@ const getAllUsers = async (req, res, next)=>{
 }
 
 const registerUser = async (req, res, next)=>{
-    const { username, phone_number, password } = req.body
+    const { username, phone_number } = req.body
     try{
-        const _ = await userSchema.validateAsync({ username, phone_number, password})
+        const _ = await userSchema.validateAsync({ username, phone_number})
         const checkUsername = await User.findOne({ 
             $or : [
                 {username}, 
@@ -26,12 +25,10 @@ const registerUser = async (req, res, next)=>{
             ]
         })
 
-        if(checkUsername) throw errors.Forbidden()
-        const hashedPassword = await bcrypt.hash(password, 8)
+        if(checkUsername) throw errors.Conflict()
         const data = await User.create({
             username,
             phone_number,
-            password : hashedPassword
         })
         
         res.status(201).json(data)
