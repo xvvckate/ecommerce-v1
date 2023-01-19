@@ -1,6 +1,18 @@
 const errors = require("http-errors")
 const Item = require("../models/item.model")
 
+const getComments = async (req, res, next)=>{
+    const { iid } = req.query
+    if(!iid) return errors.BadRequest()
+    // iid - item detail id
+    try{
+        const doc = await Item.findById(iid).select("-_id comments").exec()
+        res.status(200).json(doc)
+    }catch(err){
+        next(err)
+    }
+}
+
 const createComment = async (req, res, next)=>{
     const { iid } = req.query
     const { comment, ratting } = req.body
@@ -55,6 +67,7 @@ const deleteComment = async (req, res, next)=>{
 }
 
 module.exports = {
+    getComments,
     createComment,
     updateComment,
     deleteComment
