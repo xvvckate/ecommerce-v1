@@ -7,9 +7,10 @@ const commentController = require("../../controllers/commentController")
 const router = express.Router()
 
 router.route("/")
+      .get(commentController.getComments)
       .post(commentController.createComment)
       .put(commentController.updateComment)
-      
+
 router.route("/delete")
       .delete(commentController.deleteComment)
 
