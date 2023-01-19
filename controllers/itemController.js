@@ -12,8 +12,15 @@ const getItem = async (req, res, next)=>{
     }
     try{
         const doc = await Item.findById(id).populate("catagory", "-_id catagory").populate("brand", "-_id brand").exec()
-        const { _id, item, brand, catagory, made_in, description, usage } = doc 
-        
+        const { _id, item, brand, catagory, made_in, description, usage, comments } = doc 
+        const commentLength = comments.length
+        let totalRatting = 0
+        for(let index = 0; index < commentLength; index ++){
+            totalRatting += comments[index].ratting
+        }
+
+        const ratting = totalRatting/commentLength
+
         const data = {
             item_reference : _id,
             brand : brand.brand,
@@ -22,6 +29,7 @@ const getItem = async (req, res, next)=>{
             made_in,
             description,
             usage,
+            ratting : ratting.toFixed(2)
         }
 
         res.status(200).json(data)
@@ -35,7 +43,14 @@ const getItems = async (req, res, next)=>{
         const docs = await Item.find().populate("catagory", "-_id catagory").populate("brand", "-_id brand").exec()
         const data = await docs.map(doc=>{
             const { _id, item, brand, catagory, made_in, description, usage, comments } = doc
-            
+            const commentLength = comments.length
+            let totalRatting = 0
+            for(let index = 0; index < commentLength; index ++){
+                totalRatting += comments[index].ratting
+            }
+
+            const ratting = totalRatting/commentLength
+
             return {
                 item_reference : _id,
                 brand : brand.brand,
@@ -44,6 +59,7 @@ const getItems = async (req, res, next)=>{
                 made_in,
                 description,
                 usage,
+                ratting : ratting.toFixed(2)
             }
 
         })
